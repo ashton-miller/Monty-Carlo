@@ -1,3 +1,4 @@
+"""This module does a Monte Carlo simulation and calculates the option price for each of the days"""
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 from math import sqrt, log, exp, pi
@@ -9,17 +10,19 @@ Created on Thu Mar 28 12:09:07 2019
 
 # -*- coding: utf-8 -*-
 
-def d1(S,X,T,r,sigma):
-    return (log(S/X)+(r+sigma*sigma/2.)*T)/(sigma*sqrt(T))
+def d_1(underlying, strike_price, time, risk_free_rate, sigma):
+    """This function does the first part of black scholes function,
+        specifically for calls """
+    return (log(underlying/strike_price)+(risk_free_rate+sigma*sigma/2)*time)/(sigma*sqrt(time))
 
-#first define these 2 functions
 
-def d2(S,X,T,r,sigma):
-    return d1(S,X,T,r,sigma)-sigma*sqrt(T)
+def d_2(underlying, strike, time, risk_free_rate, sigma):
+    """This function does the firs part of the black scholes for puts """
+    return d_1(underlying, strike, time, risk_free_rate, sigma)-sigma*sqrt(time)
 
 #define the call option price function
 def bs_call(S,X,T,r,sigma):
-     return S*CND(d1(S,X,T,r,sigma))-X*exp(-r*T)*CND(d2(S,X,T,r,sigma))
+     return S*CND(d_11(S,X,T,r,sigma))-X*exp(-r*T)*CND(d2(S,X,T,r,sigma))
 
 #define the put options price function
 def bs_put(S,X,T,r,sigma):
