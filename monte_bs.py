@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
+from math import sqrt, log, exp, pi
 """
 Created on Thu Mar 28 12:09:07 2019
 
@@ -7,17 +8,11 @@ Created on Thu Mar 28 12:09:07 2019
 """
 
 # -*- coding: utf-8 -*-
-"""
-Spyder Editor
 
-This is a temporary script file.
-"""
-
-from math import sqrt, log, exp, pi
-
-#first define these 2 functions
 def d1(S,X,T,r,sigma):
     return (log(S/X)+(r+sigma*sigma/2.)*T)/(sigma*sqrt(T))
+
+#first define these 2 functions
 
 def d2(S,X,T,r,sigma):
     return d1(S,X,T,r,sigma)-sigma*sqrt(T)
