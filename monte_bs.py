@@ -25,13 +25,19 @@ def d_2(underlying, strike, time, risk_free_rate, sigma):
     """This function does the firs part of the black scholes for puts """
     return d_1(underlying, strike, time, risk_free_rate, sigma)-sigma*sqrt(time)
 
-#define the call option price function
-def bs_call(S,X,T,r,sigma):
-     return S*CND(d_11(S,X,T,r,sigma))-X*exp(-r*T)*CND(d2(S,X,T,r,sigma))
+def bs_call(underlying, strike, time, risk_free_rate, sigma):
+    """ this function calculates the price of a call options """
+    return underlying*CND(
+        d_1(
+            underlying, strike, time, risk_free_rate, sigma))-strike*exp(
+                -risk_free_rate*time)*CND(
+                    d_2(
+                        underlying, strike, time, risk_free_rate, sigma))
 
 #define the put options price function
 def bs_put(S,X,T,r,sigma):
-      return X*exp(-r*T)-S + bs_call(S,X,T,r,sigma)
+    """ This function uses the black scholes model to calculate put option pricing"""
+    return X*exp(-r*T)-S + bs_call(S,X,T,r,sigma)
 
 #define cumulative standard normal distribution
 def CND(X):
