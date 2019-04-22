@@ -1,14 +1,19 @@
 """This module does a Monte Carlo simulation and calculates the option price for each of the days"""
+from math import sqrt, log, exp, pi
+import datetime as dt
+import pandas_datareader.data as web
+import pandas as pd
+import numpy as np
+
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-from math import sqrt, log, exp, pi
+
 """
 Created on Thu Mar 28 12:09:07 2019
 
 @author: ashtonmiller
 """
 
-# -*- coding: utf-8 -*-
 
 def d_1(underlying, strike_price, time, risk_free_rate, sigma):
     """This function does the first part of black scholes function,
@@ -50,15 +55,6 @@ def CND(X):
 lower_strike_price = 303
 higher_strike_price = 304
 riskFreeRate = 0.0238
-
-
-
-import pandas_datareader.data as web
-
-import pandas as pd
-import datetime as dt
-import numpy as np
-
 
 start = dt.datetime(1998, 3, 28)
 end = dt.datetime.now()
