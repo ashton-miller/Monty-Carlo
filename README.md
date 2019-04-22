@@ -10,6 +10,9 @@ The main file to do the simulation is monte_bs.py; soon the other files in the r
 
 
 Upcoming Progress:
+
 	1.) Update all of the monte_bs.py to comply with pep8.
+	
 	2.) Change to an object based method.
+	
 	3.) Work on making implimentation easier so a user can just call the python functions
