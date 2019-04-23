@@ -39,14 +39,6 @@ def bs_put(underlying, strike, time, risk_free_rate, sigma):
     return strike*exp(
         -risk_free_rate*time)-underlying + bs_call(underlying, strike, time, risk_free_rate, sigma)
 
-"""
-–>Current stock price S
-–>Exercise price X
-–>Maturity in years T
-–>Continuously compounded risk free rate r
-–>Volatility of the underlying stock sigma
-"""
-
 
 lower_strike_price = 303
 higher_strike_price = 304
