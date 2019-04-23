@@ -1,17 +1,17 @@
 """This module does a Monte Carlo simulation and calculates the option price for each of the days"""
-from math import sqrt, log, exp, pi
+from math import sqrt, log, exp
 import datetime as dt
 import pandas_datareader.data as web
 import pandas as pd
 import numpy as np
-
+from scipy.stats import norm
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
 """
 Created on Thu Mar 28 12:09:07 2019
 
-@author: ashtonmiller
+@author: ashton-miller
 """
 
 
@@ -27,28 +27,18 @@ def d_2(underlying, strike, time, risk_free_rate, sigma):
 
 def bs_call(underlying, strike, time, risk_free_rate, sigma):
     """ this function calculates the price of a call options """
-    return underlying*CND(
+    return underlying*norm.cdf(
         d_1(
             underlying, strike, time, risk_free_rate, sigma))-strike*exp(
-                -risk_free_rate*time)*CND(
+                -risk_free_rate*time)*norm.cdf(
                     d_2(
                         underlying, strike, time, risk_free_rate, sigma))
 
-#define the put options price function
-def bs_put(S,X,T,r,sigma):
+def bs_put(underlying, strike, time, risk_free_rate, sigma):
     """ This function uses the black scholes model to calculate put option pricing"""
-    return X*exp(-r*T)-S + bs_call(S,X,T,r,sigma)
+    return strike*exp(
+        -risk_free_rate*time)-underlying + bs_call(underlying, strike, time, risk_free_rate, sigma)
 
-#define cumulative standard normal distribution
-def CND(X):
-     (a1,a2,a3,a4,a5)=(0.31938153,-0.356563782,1.781477937,-1.821255978,1.330274429)
-     L = abs(X)
-     K=1.0/(1.0+0.2316419*L)
-     w=1.0-1.0/sqrt(2*pi)*exp(-L*L/2.)*(a1*K+a2*K*K+a3*pow(K,3)+a4*pow(K,4)+a5*pow(K,5))
-     if X<0:
-        w=1.0-w
-     return w 
- 
 """
 –>Current stock price S
 –>Exercise price X
@@ -71,7 +61,7 @@ returns = prices.pct_change()
 percent_profit = 0.15
 last_price = prices[-1]
 
-num_simulations = 1000
+num_simulations =1000
 num_hits = 0
 num_days = 35
 
@@ -125,7 +115,7 @@ for x in range(num_simulations):
             break
         price_series.append(price)
         day_count -= 1
-        count += 1
+        count += 1 
 
 print(num_hits/num_simulations)
 print(sum(ttw)/len(ttw))
