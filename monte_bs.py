@@ -1,12 +1,11 @@
-"""This module does a Monte Carlo simulation and calculates the option price for each of the days"""
+"""This module does a Monte Carlo simulation and
+calculates the option price for each of the days"""
 from math import sqrt, log, exp
 import datetime as dt
 import pandas_datareader.data as web
 import pandas as pd
 import numpy as np
 from scipy.stats import norm
-#!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 
 """
 Created on Thu Mar 28 12:09:07 2019
@@ -18,12 +17,16 @@ Created on Thu Mar 28 12:09:07 2019
 def d_1(underlying, strike_price, time, risk_free_rate, sigma):
     """This function does the first part of black scholes function,
         specifically for calls """
-    return (log(underlying/strike_price)+(risk_free_rate+sigma*sigma/2)*time)/(sigma*sqrt(time))
+    return (log(
+        underlying/strike_price)+(
+            risk_free_rate+sigma*sigma/2)*time)/(sigma*sqrt(time))
 
 
 def d_2(underlying, strike, time, risk_free_rate, sigma):
     """This function does the firs part of the black scholes for puts """
-    return d_1(underlying, strike, time, risk_free_rate, sigma)-sigma*sqrt(time)
+    return d_1(
+            underlying, strike, time, risk_free_rate, sigma)-sigma*sqrt(time)
+
 
 def bs_call(underlying, strike, time, risk_free_rate, sigma):
     """ this function calculates the price of a call options """
@@ -34,12 +37,36 @@ def bs_call(underlying, strike, time, risk_free_rate, sigma):
                     d_2(
                         underlying, strike, time, risk_free_rate, sigma))
 
+
 def bs_put(underlying, strike, time, risk_free_rate, sigma):
-    """ This function uses the black scholes model to calculate put option pricing"""
+    """ This function uses the black
+    scholes model to calculate put option pricing"""
     return strike*exp(
-        -risk_free_rate*time)-underlying + bs_call(underlying, strike, time, risk_free_rate, sigma)
+        -risk_free_rate*time)-underlying + bs_call(
+                underlying, strike, time, risk_free_rate, sigma)
 
 
+class Simulator:
+    """This class defines the simulator to be used """
+    def __init__(self, risk_free, start_time, end_time, stock_symbol):
+        #self.lower_strike = lower_strike
+        #self.higher_strike = higher_strike
+        self.risk_free = risk_free
+        self.start = start_time
+        self.end = end_time
+        self.symbol = stock_symbol
+        self.gather_data()
+    def gather_data(self):
+        """Gather the data from yahoo finance about the symbol's historic prices"""
+        self.prices = web.DataReader(self.symbol, 'yahoo', self.start, self.end)['Close']
+        self.returns = self.prices.pct_change()
+        self.last_price = self.prices[-1]
+    def
+
+    def simulate_future(
+            self, lower_strike, higher_strike, take_profit, days_to_expiration):
+        """This function runs through the simulation a certain amount of times"""
+        pass
 lower_strike_price = 303
 higher_strike_price = 304
 riskFreeRate = 0.0238
@@ -78,17 +105,17 @@ loss = 70
 ttw = []
 for x in range(num_simulations):
 
-    count = 0 
+    count = 0
     daily_vol = returns.std()
     #daily_vol = 0.015
     price_series = []
-    
+
     price = last_price * (1+ np.random.normal(0, daily_vol))
-    
+
     price_series.append(price)
     day_count = num_days
     for y in range(num_days):
-        
+
         if count == num_days-1:
             ttw.append(count)
             break
@@ -97,17 +124,17 @@ for x in range(num_simulations):
         #Here we will calculate the BS Price of the call option
         lower_option_price = float(bs_call(price, lower_strike_price, (day_count/365), riskFreeRate, yearly_vol))
         higher_option_price = float(bs_call(price, higher_strike_price, (day_count/365), riskFreeRate, yearly_vol))
-        
+
         close_price = lower_option_price - higher_option_price
-        
+
         profit = close_price - debit_cost
         if profit >= max_profit*percent_profit:
             num_hits += 1
-            ttw.append(count)            
+            ttw.append(count)
             break
         price_series.append(price)
         day_count -= 1
-        count += 1 
+        count += 1
 
 print(num_hits/num_simulations)
 print(sum(ttw)/len(ttw))
